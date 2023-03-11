@@ -16,5 +16,7 @@ def start(message):
 def get_text_messages(message):
     if message.text == 'How to use':
         bot.send_message(message.from_user.id, "We'll define some best practices a bit later", parse_mode='Markdown')
+    else :
+        bot.send_message(message.from_user.id,"We've got your message but have no idea at the moment what to do with it. \nSorry", parse_mode='Markdown')
 
 bot.polling(none_stop=True, interval=0) #обязательная для работы бота часть
