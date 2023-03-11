@@ -9,7 +9,7 @@ This project is a try to implement a recognition of Safety Helmet wearing by wor
 - [ ] Choose ANN arch 
 - [ ] Train network with Kagle dataset 
 - [ ] Verify the results on test data 
-- [ ] Implement Python server to communicate with Telegram
+- [x] Implement Python server to communicate with Telegram
 - [ ] Implement Data Validation 
 - [ ] Implement Image recognition 
 - [ ] Implement result sending 
