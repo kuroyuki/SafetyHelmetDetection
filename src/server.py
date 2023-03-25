@@ -20,7 +20,7 @@ def get_text_messages(message):
     if message.text == 'How to use':
         bot.send_message(message.from_user.id, "We'll define some best practices a bit later", parse_mode='Markdown')
     elif message.text == 'Knowledge Base':
-        reply = "The latest version of the project's Knowledge is [here](https://raw.githubusercontent.com/kuroyuki/SafetyHelmetDetection/main/knowedge.base.n3)"
+        reply = "The latest version of the project's Knowledge is [here](https://github.com/kuroyuki/SafetyHelmetDetection/blob/main/knowedge.base.n3)"
         bot.send_message(message.from_user.id, reply, parse_mode='Markdown', disable_web_page_preview=True)
     elif message.text == 'Training Notebook':
         reply = "Please checkout [here](https://github.com/kuroyuki/SafetyHelmetDetection/blob/main/src/training.ipynb)"
