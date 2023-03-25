@@ -1,0 +1,28 @@
+@prefix shd:<URN:shd:>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+shd:Training a rdfs:Class;
+        rdfs:label "Training system";
+        rdfs:isDefinedBy "Yuri Zhukov";
+        rdfs:comment "A system to produce trained model to be use for helmet recognition".
+
+shd:Dataset a rdfs:Class;
+        rdfs:label "Dataset";
+        rdfs:comment "Validated dataset";
+        :gotFrom :Kaggle. 
+
+shd:TrainDataset a rdfs:Class;
+        rdfs:label "Training Dataset";
+        rdfs:comment "A dataset to be used to train a model";
+        rdfs:subClassOf shd:Dataset;
+        :partOf  shd:Dataset.
+
+shd:ValidateDataset a rdfs:Class;
+        rdfs:label "Validation Dataset";
+        rdfs:comment "A dataset to be used to validate a trained model";
+        rdfs:subClassOf shd:Dataset;
+        :partOf  shd:Dataset. 
+
+

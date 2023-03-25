@@ -1,0 +1,25 @@
+@prefix shd:<URN:shd:>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+shd:SafetyHelmetDetector a rdfs:Class;
+        rdfs:label "Safety Helmet Detection system";
+        rdfs:isDefinedBy "Yuri Zhukov";
+        rdfs:comment "This is a top entity of the project".
+
+shd:Camera a rdfs:Class;
+        rdfs:label "Video Camera";
+        rdfs:comment "Source of input data";
+        owl:isPartOf shd:SafetyHelmetDetector.
+
+shd:Server a rdfs:Class;
+        rdfs:label "Server";
+        rdfs:comment "Main computaton unit where image recognition happens";
+        owl:isPartOf shd:SafetyHelmetDetector.
+
+shd:Telegram a rdfs:Class;
+        rdfs:label "Telegram";
+        rdfs:comment "User interface that display alarm notifications";
+        owl:isPartOf shd:SafetyHelmetDetector.
+
