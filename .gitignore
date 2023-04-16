@@ -2,3 +2,5 @@ telegram-bot.secret
 data
 train
 val
+runs
+
