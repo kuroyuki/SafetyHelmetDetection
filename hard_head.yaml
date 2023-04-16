@@ -1,0 +1,7 @@
+names:
+- helmet
+- head
+- person
+nc: '3'
+train: ../data/train/images
+val: ../data/val/images
