@@ -1,0 +1,106 @@
+@prefix ind:<URN:inds:>.
+@prefix prop:<URN:prop:>.
+@prefix classes:<URN:class:>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+
+ind:procA0 a classes:Process;
+    rdfs:label "Safety helmet detection";
+    rdfs:isDefinedBy "Egor Zubenko";
+
+    prop:hasKPI ind:kpi1, ind:kpi2, ind:kpi3;
+    prop:hasResource ind:res1, ind:res2, ind:res3;
+    prop:hasInput ind:inpA0;
+    prop:hasOutput ind:outpA0.
+
+ind:procA1 prop:SubProcess ind:procA0;
+    rdfs:label "Data preparation";
+    
+    prop:hasKPI ind:kpi1;
+    prop:hasInput ind:inpA1;
+    prop:hasOutput ind:outpA1.
+
+ind:procA2 prop:SuperProcess ind:procA0;
+    rdfs:label "Helmet Detection Process";
+    
+    prop:hasInput ind:inpA2;
+    prop:hasOutput ind:outpA2.
+
+ind:procA3 prop:SuperProcess ind:procA0;
+    rdfs:label "Helmet Detection";
+    
+    prop:hasKPI ind:kpi2, ind:kpi3;
+    prop:hasResource ind:res1, ind:res2;
+    prop:hasInput ind:inpA3;
+    prop:hasOutput ind:outpA3.
+
+ind:procA4 prop:SuperProcess ind:procA0;
+    rdfs:label "Helmet Detection Results";
+    
+    prop:hasInput ind:inpA4;
+    prop:hasOutput ind:outpA4.
+
+ind:procA5 prop:SuperProcess ind:procA0;
+    rdfs:label "Helmet Use Detection message";
+    
+    prop:hasResource ind:res3;
+    prop:hasInput ind:inpA5;
+    prop:hasOutput ind:outpA5.
+
+ind:kpi1 a classes:KPI ;
+    rdfs:label "Accuracy score";
+    prop:hasMinValue "0.95"^^xsd:decimal .
+
+ind:kpi2 a classes:KPI ;
+    rdfs:label "Time of detection";
+    prop:hasMaxValue "1"^^xsd:string .
+
+ind:kpi3 a classes:KPI ;
+    rdfs:label "Image dimesnsions".
+
+ind:res1 a classes:Resource;
+    rdfs:label "Pre-trained neural network".
+
+ind:res2 a classes:Resource;
+    rdfs:label "CNN logic".
+
+ind:res3 a classes:Resource;
+    rdfs:label "Telegram".
+
+ind:inpA0 a classes:Input;
+    rdfs:label "message with image".
+
+ind:outpA0 a classes:Output;
+    rdfs:label "message of security breach".
+
+ind:inpA0 rdfs:subClassOf ind:inpA1 .
+ind:inpA1 rdfs:subClassOf ind:inpA0 .
+
+ind:outpA1 a classes:Output;
+    rdfs:label "Prepared dataset".
+
+ind:outpA1 rdfs:subClassOf ind:inpA2 .
+ind:inpA2 rdfs:subClassOf ind:outpA1 .
+
+ind:outpA2 a classes:Output;
+    rdfs:label "detected helmets in IMG with bounding boxes".
+
+ind:outpA2 rdfs:subClassOf ind:inpA3 .
+ind:inpA3 rdfs:subClassOf ind:outpA2 .
+
+ind:outpA3 a classes:Output;
+    rdfs:label "Recognised data".
+
+ind:outpA3 rdfs:subClassOf ind:inpA4 .
+ind:inpA4 rdfs:subClassOf ind:outpA3 .
+
+ind:outpA4 a classes:Output;
+    rdfs:label "final results of helmet detection with statistics".
+
+ind:outpA4 rdfs:subClassOf ind:inpA5 .
+ind:inpA5 rdfs:subClassOf ind:outpA4 .
+
+ind:outpA0 rdfs:subClassOf ind:outpA5 .
+ind:outpA5 rdfs:subClassOf ind:outpA0 .
