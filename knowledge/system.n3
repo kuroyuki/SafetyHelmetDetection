@@ -23,3 +23,35 @@ shd:Telegram a rdfs:Class;
         rdfs:comment "User interface that display alarm notifications";
         owl:isPartOf shd:SafetyHelmetDetector.
 
+shd:DetectionSystem a rdfs:Class; 
+        rdfs:label "Detection System"; 
+        rdfs:comment "A system designed to detect and identify objects or events in a particular environment."; 
+        rdfs:subClassOf owl:Thing. 
+ 
+shd:BoundingBox a owl:Class ; 
+    rdfs:label "Bounding box" . 
+ 
+shd:hasHelmet rdf:type rdf:Property ; 
+    rdfs:label "hasHelmet" ; 
+    rdfs:domain shd:Human ; 
+    rdfs:range shd:ProtectiveHelmet . 
+ 
+shd:hasHead rdf:type rdf:Property ; 
+    rdfs:label "hasHead" ; 
+    rdfs:domain shd:Human ; 
+    rdfs:range shd:BoundingBox . 
+ 
+shd:hasBoundingBox rdf:type rdf:Property ; 
+    rdfs:label "hasBoundingBox" ; 
+    rdfs:domain shd:ProtectiveHelmet ; 
+    rdfs:range shd:BoundingBox . 
+ 
+shd:inCameraRange rdf:type rdf:Property ; 
+    rdfs:label "inCameraRange" ; 
+    rdfs:domain shd:ProtectiveHelmet ; 
+    rdfs:range shd:Camera . 
+ 
+shd:hasID rdf:type rdf:Property ; 
+    rdfs:label "hasID" ; 
+    rdfs:domain shd:Helmet, shd:Human ; 
+    rdfs:range xsd:string .
