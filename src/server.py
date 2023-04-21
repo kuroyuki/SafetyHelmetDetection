@@ -3,15 +3,21 @@ import os
 from telebot import types
 import requests
 import recognition
+from PIL import Image 
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model.pth')
 
 @bot.message_handler(content_types= ["photo"])
 def verifyUser(message):
-    print ("Got photo")
-    labels = recognition.look_for_helmets(model, message.photo, 0.7)
-    bot.send_message(message.chat.id, "Labels: " + str(labels))
+    print(len(message.photo))
+    file = bot.get_file(message.photo[-1].file_id)
+    print(file)
+    photo = bot.download_file(file.file_path)
+    with open("image.jpg", 'wb') as new_file:
+        new_file.write(photo)
+    labels = recognition.look_for_helmets(model, "image.jpg", 0.7)
+    bot.send_message(message.chat.id, "Labels: "+labels )
 
 @bot.message_handler(commands=['start'])
 def start(message):

@@ -3,6 +3,7 @@ import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor, FasterRCNN_ResNet50_FPN_Weights
 import numpy as np
 import torch 
+import  matplotlib.pyplot as plt
 
 CLASS_NAME = ['__background__', 'helmet', 'head', 'person']
 
@@ -23,14 +24,15 @@ def load_model(path):
 
     return model
 
-def look_for_helmets(model, image, threshold):
-    img = image.copy()
+def look_for_helmets(model, path, threshold):
+    image = plt.imread(path)
+    img = np(image).copy()
 
     # bring color channels to front
     img = np.transpose(img, (2, 0, 1)).astype(np.float32)
 
     # convert to tensor; tensor([  3., 416., 416.], device='cuda:0')
-    img = torch.tensor(img, dtype=torch.float).cuda() #gpu enabled
+    img = torch.tensor(img, dtype=torch.float).cpu() #gpu enabled
         
     # add batch dimension
     img = torch.unsqueeze(img, 0)
@@ -49,7 +51,6 @@ def look_for_helmets(model, image, threshold):
         # filter out boxes according to `detection_threshold`
         boxes = boxes[scores > threshold].astype(np.int32)
         lbls = lbls[scores > threshold].astype(np.int32)
-        pred_boxes = boxes.copy()
         # get all the predicited class names
         pred_class = [CLASS_NAME[i] for i in lbls]
         return pred_class
