@@ -2,3 +2,4 @@ pyTelegramBotAPI
 numpy
 torch
 torchvision
+matplotlib
