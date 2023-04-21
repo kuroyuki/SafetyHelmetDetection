@@ -1,1 +1,4 @@
 pyTelegramBotAPI
+numpy
+torch
+torchvision

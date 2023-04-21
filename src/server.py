@@ -2,7 +2,16 @@ import telebot
 import os 
 from telebot import types
 import requests
+import recognition
+
 bot = telebot.TeleBot(os.environ['TOKEN']) 
+model = recognition.load_model('./savemodel/best_model.pth')
+
+@bot.message_handler(content_types= ["photo"])
+def verifyUser(message):
+    print ("Got photo")
+    labels = recognition.look_for_helmets(model, message.photo, 0.7)
+    bot.send_message(message.chat.id, "Labels: " + str(labels))
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -29,3 +38,4 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id,"We've got your message but have no idea at the moment what to do with it. \nSorry", parse_mode='Markdown')
 
 bot.polling(none_stop=True, interval=0) #обязательная для работы бота часть
+
