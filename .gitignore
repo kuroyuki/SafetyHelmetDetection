@@ -3,4 +3,8 @@ data
 train
 val
 runs
+image.*
+*.pt
+__pycache__ 
+savemodel
 

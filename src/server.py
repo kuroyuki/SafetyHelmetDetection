@@ -16,8 +16,12 @@ def verifyUser(message):
     photo = bot.download_file(file.file_path)
     with open("image.jpg", 'wb') as new_file:
         new_file.write(photo)
-    labels = recognition.look_for_helmets(model, "image.jpg", 0.7)
-    bot.send_message(message.chat.id, "Labels: "+labels )
+    from PIL import Image
+
+    im1 = Image.open(r'image.jpg')
+    im1.save(r'image.png')
+    labels = recognition.look_for_helmets(model, "image.png", 0.7)
+    bot.send_message(message.chat.id, "Labels: "+ str(labels) )
 
 @bot.message_handler(commands=['start'])
 def start(message):

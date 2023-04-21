@@ -25,9 +25,8 @@ def load_model(path):
     return model
 
 def look_for_helmets(model, path, threshold):
-    image = plt.imread(path)
-    img = np(image).copy()
-
+    image = plt.imread('./image.png')
+    img = image.copy()
     # bring color channels to front
     img = np.transpose(img, (2, 0, 1)).astype(np.float32)
 
@@ -53,6 +52,6 @@ def look_for_helmets(model, path, threshold):
         lbls = lbls[scores > threshold].astype(np.int32)
         # get all the predicited class names
         pred_class = [CLASS_NAME[i] for i in lbls]
-        return pred_class
+        return pred_class, boxes
     else:
         return []
