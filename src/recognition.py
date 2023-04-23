@@ -22,6 +22,7 @@ def load_model(path):
     model.load_state_dict(checkpoint['model_state_dict'])
     model.to(torch.device('cpu')).eval()
 
+    print("Using model from: "+path)
     return model
 
 def look_for_helmets(model, path, threshold):
