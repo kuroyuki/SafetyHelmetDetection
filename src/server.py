@@ -8,7 +8,6 @@ from PIL import Image
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_andrew.pth')
 
-
 @bot.message_handler(content_types= ["photo"])
 def verifyUser(message):
     print(len(message.photo))
@@ -37,20 +36,18 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    new_model = 0
+    global model
     if message.text == 'Model 1':
-        new_model = recognition.load_model('./savemodel/best_model.pth')
+        model = recognition.load_model('./savemodel/best_model.pth')
         bot.send_message(message.from_user.id, "Using Model 1", parse_mode='Markdown')
     elif message.text == 'Model 2':
-        new_model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
+        model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
         bot.send_message(message.from_user.id, "Using Model 2", parse_mode='Markdown')
     elif message.text == 'Model 3':
-        new_model = recognition.load_model('./savemodel/best_model_andrew.pth')
+        model = recognition.load_model('./savemodel/best_model_andrew.pth')
         bot.send_message(message.from_user.id, "Using Model 3", parse_mode='Markdown')
     else :
         bot.send_message(message.from_user.id,"We've got your message but have no idea at the moment what to do with it. \nSorry", parse_mode='Markdown')
-    
-    if model != 0:
-        model = new_model
+
 bot.polling(none_stop=True, interval=0) #обязательная для работы бота часть
 
