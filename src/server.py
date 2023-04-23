@@ -27,23 +27,24 @@ def verifyUser(message):
 def start(message):
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton('How to use')
-    btn2 = types.KeyboardButton('Knowledge Base')
-    btn3 = types.KeyboardButton('Training Notebook')
+    btn1 = types.KeyboardButton('Model 1')
+    btn2 = types.KeyboardButton('Model 2')
+    btn3 = types.KeyboardButton('Model 3')
 
     markup.add(btn1, btn2, btn3)
-    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!", reply_markup=markup)
+    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n Model 1 is default choice\n Good luck ", reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    if message.text == 'How to use':
-        bot.send_message(message.from_user.id, "We'll define some best practices a bit later", parse_mode='Markdown')
-    elif message.text == 'Knowledge Base':
-        reply = "The latest version of the project's Knowledge is [here](https://github.com/kuroyuki/SafetyHelmetDetection/blob/main/knowedge)"
-        bot.send_message(message.from_user.id, reply, parse_mode='Markdown', disable_web_page_preview=True)
-    elif message.text == 'Training Notebook':
-        reply = "Please checkout [here](https://github.com/kuroyuki/SafetyHelmetDetection/blob/main/src/training.ipynb)"
-        bot.send_message(message.from_user.id, reply, parse_mode='Markdown', disable_web_page_preview=True)
+    if message.text == 'Model 1':
+        model = recognition.load_model('./savemodel/best_model.pth')
+        bot.send_message(message.from_user.id, "Using Model 1", parse_mode='Markdown')
+    elif message.text == 'Model 2':
+        model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
+        bot.send_message(message.from_user.id, "Using Model 2", parse_mode='Markdown')
+    elif message.text == 'Model 3':
+        model = recognition.load_model('./savemodel/best_model_andrew.pth')
+        bot.send_message(message.from_user.id, "Using Model 3", parse_mode='Markdown')
     else :
         bot.send_message(message.from_user.id,"We've got your message but have no idea at the moment what to do with it. \nSorry", parse_mode='Markdown')
 
