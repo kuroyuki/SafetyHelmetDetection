@@ -7,4 +7,5 @@ services:
     env_file:
       - ./telegram-bot.secret
     volumes:
-      - ./savemodel/best_model.pth:/app/SHD/savemodel/best_model.pth
+      - ./savemodel:/app/SHD/savemodel
+    restart: unless-stopped
