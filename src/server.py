@@ -29,13 +29,13 @@ def verifyUser(message):
     input_image.save(r'image.png')
 
     #recognise 
-    labels = recognition.look_for_helmets(model, "image.png", 0.7)
+    [labels, boxes] = recognition.look_for_helmets(model, "image.png", 0.7)
 
     #prepare answer
     caption = "No violations detected"
     if "head" in labels:
         caption="Warning !!!!"
-    bot.send_photo(message.chat.id, prepare_output_image(input_image), caption=caption)
+    bot.send_photo(message.chat.id, prepare_output_image(input_image, labels, boxes), caption=caption)
 
 @bot.message_handler(commands=['start'])
 def start(message):
