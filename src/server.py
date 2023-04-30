@@ -14,8 +14,10 @@ def preprocess_input_image(img):
 
 def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
-    color = 'lightgreen'
-    for box in boxes:
+    for index, box in boxes:
+        color = 'lightgreen'
+        if labels[index] != "helmet":
+            color = "red"
         draw.line((box[0], box[1], box[2], box[1]), fill=color, width=1)
         draw.line((box[2], box[1], box[2], box[3]), fill=color, width=1)
         draw.line((box[2], box[3], box[0], box[3]), fill=color, width=1)
