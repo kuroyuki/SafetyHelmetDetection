@@ -16,12 +16,14 @@ def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
     for index, box in boxes:
         color = 'lightgreen'
+        width =1 
         if labels[index] != "helmet":
             color = "red"
-        draw.line((box[0], box[1], box[2], box[1]), fill=color, width=1)
-        draw.line((box[2], box[1], box[2], box[3]), fill=color, width=1)
-        draw.line((box[2], box[3], box[0], box[3]), fill=color, width=1)
-        draw.line((box[0], box[3], box[0], box[1]), fill=color, width=1)
+            width = 2
+        draw.line((box[0], box[1], box[2], box[1]), fill=color, width=width)
+        draw.line((box[2], box[1], box[2], box[3]), fill=color, width=width)
+        draw.line((box[2], box[3], box[0], box[3]), fill=color, width=width)
+        draw.line((box[0], box[3], box[0], box[1]), fill=color, width=width)
     return img
 
 @bot.message_handler(content_types= ["photo"])
