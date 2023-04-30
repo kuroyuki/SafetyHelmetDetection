@@ -8,20 +8,34 @@ from PIL import Image
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_andrew.pth')
 
+
+def preprocess_input_image(img):
+    return img.resize((416, 416))
+
+def prepare_output_image(img, labels, boxes):
+    return img
+
 @bot.message_handler(content_types= ["photo"])
 def verifyUser(message):
-    print(len(message.photo))
+    #Get image from telegram
     file = bot.get_file(message.photo[-1].file_id)
-    print(file)
     photo = bot.download_file(file.file_path)
     with open("image.jpg", 'wb') as new_file:
         new_file.write(photo)
-    from PIL import Image
+    input_image = Image.open(r'image.jpg')
 
-    im1 = Image.open(r'image.jpg')
-    im1.save(r'image.png')
+    #prepare image for further processing 
+    input_image = preprocess_input_image(input_image)
+    input_image.save(r'image.png')
+
+    #recognise 
     labels = recognition.look_for_helmets(model, "image.png", 0.7)
-    bot.send_message(message.chat.id, "Labels: "+ str(labels) )
+
+    #prepare answer
+    caption = "No violations detected"
+    if "head" in labels:
+        caption="Warning !!!!"
+    bot.send_photo(message.chat.id, prepare_output_image(input_image), caption=caption)
 
 @bot.message_handler(commands=['start'])
 def start(message):
