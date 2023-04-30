@@ -14,8 +14,12 @@ def preprocess_input_image(img):
 
 def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
+    color = 'lightgreen'
     for box in boxes:
-        draw.line((box[0], box[1], box[2], box[3]), fill='green', width=1)
+        draw.line((box[0], box[1], box[2], box[1]), fill=color, width=1)
+        draw.line((box[2], box[1], box[2], box[3]), fill=color, width=1)
+        draw.line((box[2], box[3], box[0], box[3]), fill=color, width=1)
+        draw.line((box[0], box[3], box[0], box[1]), fill=color, width=1)
     return img
 
 @bot.message_handler(content_types= ["photo"])
@@ -38,7 +42,21 @@ def verifyUser(message):
     caption = "No violations detected"
     if "head" in labels:
         caption="Warning !!!!"
-    bot.send_photo(message.chat.id, prepare_output_image(input_image, labels, boxes), caption=(caption+str(labels)+str(boxes)))
+    if len(labels) == 0:
+        caption="Warning !!!!"
+    #add boxes
+    output_image = prepare_output_image(input_image, labels, boxes)
+    #add red frame to the image 
+    if caption != "No violations detected":
+        draw = ImageDraw.Draw(output_image)
+        color = 'red'
+        draw.line((2,2, 414, 2), fill=color, width=2)
+        draw.line((414,2, 414, 414), fill=color, width=2)
+        draw.line((414, 414, 2, 414), fill=color, width=2)
+        draw.line((2, 414, 2,2), fill=color, width=2)
+
+
+    bot.send_photo(message.chat.id, output_image, caption=(caption+str(labels)+str(boxes)))
 
 @bot.message_handler(commands=['start'])
 def start(message):
