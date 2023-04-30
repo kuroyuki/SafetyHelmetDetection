@@ -3,7 +3,7 @@ import os
 from telebot import types
 import requests
 import recognition
-from PIL import Image 
+from PIL import Image, ImageDraw
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_andrew.pth')
@@ -13,6 +13,9 @@ def preprocess_input_image(img):
     return img.resize((416, 416))
 
 def prepare_output_image(img, labels, boxes):
+    draw = ImageDraw.Draw(img)
+    for box in boxes:
+        draw.line((box[0], box[1], box[2], box[3]), fill='green', width=1)
     return img
 
 @bot.message_handler(content_types= ["photo"])
