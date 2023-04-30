@@ -6,7 +6,7 @@ import recognition
 from PIL import Image, ImageDraw
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
-model = recognition.load_model('./savemodel/best_model_andrew.pth')
+model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
 
 
 def preprocess_input_image(img):
@@ -71,7 +71,7 @@ def start(message):
     btn3 = types.KeyboardButton('Model 3')
 
     markup.add(btn1, btn2, btn3)
-    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n Model 3 is default choice\n Good luck ", reply_markup=markup)
+    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n Model 2 is default choice\n Good luck ", reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
