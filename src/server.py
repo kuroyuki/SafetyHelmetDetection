@@ -35,7 +35,7 @@ def verifyUser(message):
     caption = "No violations detected"
     if "head" in labels:
         caption="Warning !!!!"
-    bot.send_photo(message.chat.id, prepare_output_image(input_image, labels, boxes), caption=(caption+labels+boxes))
+    bot.send_photo(message.chat.id, prepare_output_image(input_image, labels, boxes), caption=(caption+str(labels)+str(boxes)))
 
 @bot.message_handler(commands=['start'])
 def start(message):
