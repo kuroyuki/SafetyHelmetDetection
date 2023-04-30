@@ -6,6 +6,8 @@
 @prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
 
+###============     INDIVIDUALS     ============####
+
 ind:procA0 a classes:Process;
     rdfs:label "Safety helmet detection";
     rdfs:isDefinedBy "Egor Zubenko";
@@ -49,16 +51,31 @@ ind:procA5 prop:SuperProcess ind:procA0;
     prop:hasInput ind:inpA5;
     prop:hasOutput ind:outpA5.
 
+
+###============     KPI     ============####
+
 ind:kpi1 a classes:KPI ;
     rdfs:label "Accuracy score";
-    prop:hasMinValue "0.95"^^xsd:decimal .
+    rdfs:comment "represents the percentage of correctly identified safety helmets in the image";
+    prop:hasMinValue "95"^^xsd:decimal .
+    prop:hasUnit "%";
+    prop:hasMinValue "0"^^xsd:decimal;
+    prop:hasMaxValue "100"^^xsd:decimal.
 
 ind:kpi2 a classes:KPI ;
     rdfs:label "Time of detection";
-    prop:hasMaxValue "1"^^xsd:string .
+    rdfs:comment "represents the time it takes to detect safety helmets in the image";
+    prop:hasUnit "s";
+    prop:hasMaxValue "5"^^xsd:decimal.
 
 ind:kpi3 a classes:KPI ;
-    rdfs:label "Image dimesnsions".
+    rdfs:label "Image dimesnsions";
+    rdfs:comment "The image dimensions represent the size of the image in pixels";
+    prop:hasUnit "pixels";
+    prop:hasMinValue "640"^^xsd:decimal;
+    prop:hasMaxValue "1920"^^xsd:decimal.
+
+###============     RESOURCES     ============####
 
 ind:res1 a classes:Resource;
     rdfs:label "Pre-trained neural network".
@@ -69,38 +86,39 @@ ind:res2 a classes:Resource;
 ind:res3 a classes:Resource;
     rdfs:label "Telegram".
 
+###============     INPUTS AND OUTPUTS   ============####
+
+## For Process A0 
 ind:inpA0 a classes:Input;
     rdfs:label "message with image".
 
 ind:outpA0 a classes:Output;
     rdfs:label "message of security breach".
 
-ind:inpA0 rdfs:subClassOf ind:inpA1 .
-ind:inpA1 rdfs:subClassOf ind:inpA0 .
+## For Process A1 
+ind:inpA0 owl:sameAs ind:inpA1.
 
 ind:outpA1 a classes:Output;
     rdfs:label "Prepared dataset".
 
-ind:outpA1 rdfs:subClassOf ind:inpA2 .
-ind:inpA2 rdfs:subClassOf ind:outpA1 .
+## For Process A2
+ind:outpA1 owl:sameAs ind:inpA2.
 
 ind:outpA2 a classes:Output;
     rdfs:label "detected helmets in IMG with bounding boxes".
 
-ind:outpA2 rdfs:subClassOf ind:inpA3 .
-ind:inpA3 rdfs:subClassOf ind:outpA2 .
+## For Process A3
+ind:outpA2 owl:sameAs ind:inpA3.
 
 ind:outpA3 a classes:Output;
     rdfs:label "Recognised data".
 
-ind:outpA3 rdfs:subClassOf ind:inpA4 .
-ind:inpA4 rdfs:subClassOf ind:outpA3 .
+## For Process A4
+ind:outpA3 owl:sameAs ind:inpA4.
 
 ind:outpA4 a classes:Output;
     rdfs:label "final results of helmet detection with statistics".
 
-ind:outpA4 rdfs:subClassOf ind:inpA5 .
-ind:inpA5 rdfs:subClassOf ind:outpA4 .
-
-ind:outpA0 rdfs:subClassOf ind:outpA5 .
-ind:outpA5 rdfs:subClassOf ind:outpA0 .
+## For Process A4
+ind:outpA4 owl:sameAs ind:inpA5.
+ind:outpA0 owl:sameAs ind:outpA5.
