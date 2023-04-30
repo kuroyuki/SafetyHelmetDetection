@@ -14,7 +14,7 @@ def preprocess_input_image(img):
 
 def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
-    for index, box in boxes:
+    for index, box in enumerate(boxes):
         color = 'lightgreen'
         width =1 
         if labels[index] != "helmet":
