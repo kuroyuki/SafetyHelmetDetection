@@ -1,0 +1,54 @@
+@prefix ind:<URN:inds:>.
+@prefix prop:<URN:prop:>.
+@prefix classes:<URN:classes:>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+# Define classes
+classes:Process	a owl:Class.
+
+classes:Interval	a owl:Class.
+
+classes:KPI	a owl:Class.
+
+classes:state	a owl:Class.
+
+# Define properties
+prop:SubProcess	a owl:ObjectProperty.
+
+prop:causes	a owl:ObjectProperty;
+		a owl:AsymmetricProperty.
+
+prop:hasKPI	a owl:ObjectProperty;
+		a owl:AsymmetricProperty;
+		a owl:IrreflexiveProperty.
+
+prop:hasInter	a owl:ObjectProperty;
+		rdfs:domain classes:KPI;
+		rdfs:range classes:Interval.
+
+prop:hasMin	a owl:DataTypeProperty.
+
+prop:hasMax	a owl:DataTypeProperty.
+
+# Define individuals
+ind:AllKPIs	a owl:Class;
+		owl:oneof ind:kpi0,ind:kpi1,ind:kpi2,ind:kpi3,ind:kpi4,ind:kpi5,ind:kpi6,ind:kpi7,ind:kpi8.
+
+# Define disjointness
+classes:state owl:disjointWith classes:Process.
+
+# Define property disjointness
+prop:hasKPI owl:propertyDisjointWith prop:causes.
+
+# Define negative property assertions
+ind:np1	a	owl:NegativePropertyAssertion;
+	owl:sourceIndividual ind:proc0;
+	owl:assertionProperty prop:hasKPI;
+	owl:targetIndividual ind:kpi3.
+
+ind:np2	a	owl:NegativePropertyAssertion;
+	owl:sourceIndividual ind:Interval1;
+	owl:assertionProperty prop:hasMin;
+	owl:targetValue "10".
