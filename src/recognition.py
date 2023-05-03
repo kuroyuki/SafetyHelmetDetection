@@ -4,8 +4,18 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor, FasterRC
 import numpy as np
 import torch 
 import  matplotlib.pyplot as plt
+from PIL import Image
 
 CLASS_NAME = ['__background__', 'helmet', 'head', 'person']
+
+def load_yolo5(path):
+    torch.hub.load('ultralytics/yolov5', 'custom', path=path, force_reload=True)
+    
+def look_for_helmets_with_yolo(model, path, threshold):
+    image = plt.imread(path)
+    img = image.copy()
+    results = model(img, size=416)  
+    return results
 
 def load_model(path):
     
@@ -28,6 +38,7 @@ def load_model(path):
 def look_for_helmets(model, path, threshold):
     image = plt.imread('./image.png')
     img = image.copy()
+    img.resize((416, 416))
     # bring color channels to front
     img = np.transpose(img, (2, 0, 1)).astype(np.float32)
 

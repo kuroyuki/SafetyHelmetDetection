@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
+yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pth')
 selectedModel = "Model 2"
 
 def preprocess_input_image(img):
@@ -40,7 +41,11 @@ def verifyUser(message):
     input_image.save(r'image.png')
 
     #recognise 
-    [labels, boxes] = recognition.look_for_helmets(model, "image.png", 0.7)
+    [labels, boxes]
+    if selectedModel == 'Model 1':
+        [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png")
+    else:
+        [labels, boxes] = recognition.look_for_helmets(model, "image.png", 0.7)
 
     #prepare answer
     caption = "No violations detected"
