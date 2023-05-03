@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
-
+selectedModel = "Model 2"
 
 def preprocess_input_image(img):
     return img.resize((416, 416))
@@ -71,19 +71,22 @@ def start(message):
     btn3 = types.KeyboardButton('Model 3')
 
     markup.add(btn1, btn2, btn3)
-    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n Model 2 is default choice\n Good luck ", reply_markup=markup)
+    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n "+selectedModel+" is default choice\n Good luck ", reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    global model
+    global model, selectedModel
     if message.text == 'Model 1':
         model = recognition.load_model('./savemodel/best_model.pth')
+        selectedModel = 'Model 1'
         bot.send_message(message.from_user.id, "Using Model 1", parse_mode='Markdown')
     elif message.text == 'Model 2':
         model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
+        selectedModel = 'Model 2'
         bot.send_message(message.from_user.id, "Using Model 2", parse_mode='Markdown')
     elif message.text == 'Model 3':
         model = recognition.load_model('./savemodel/best_model_andrew.pth')
+        selectedModel = 'Model 3'
         bot.send_message(message.from_user.id, "Using Model 3", parse_mode='Markdown')
     else :
         bot.send_message(message.from_user.id,"We've got your message but have no idea at the moment what to do with it. \nSorry", parse_mode='Markdown')
