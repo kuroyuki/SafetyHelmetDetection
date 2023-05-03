@@ -1,62 +1,134 @@
+
 @prefix ind:<URN:inds:>.
+@prefix shd:<URN:shd:>.
+@prefix classes:<URN:class>.
 @prefix prop:<URN:prop:>.
-@prefix classes:<URN:class:>.
-@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+ind:proc0 a classes:Process ;
+    rdfs:label "Safety helmet detection" ;
+    rdf:isDefinedBy "Group 1" ;
+    prop:hasKPI ind:kpi1, ind:kpi2, ind:kpi3 ;
+    prop:hasResource ind:res1, ind:res2, ind:res3 ;
+    prop:hasInput ind:inp1 ;
+    prop:hasOutput ind:outp1 .
 
-ind:proc0 a classes:Process;
-		rdfs:label "Safety helmet detection";
-		rdf:isDefinedBy	"Vitaly Shilnikov";
-		prop:hasKPI	ind:kpi1;
-        prop:hasKPI	ind:kpi2;
-        prop:hasKPI	ind:kpi3;
-        
-        prop:hasResource ind:res1;
-        prop:hasResource ind:res2;
-        prop:hasResource ind:res3;
-        
-        prop:hasInput  ind:inp1;
-        prop:hasOutput ind:outp1.
-        
-ind:kpi1 a classes:KPI;
-        rdfs:label "Accuracy score";
-        prop:hasMinAcc "0.85".       
-ind:kpi2 a classes:KPI;
-        rdfs:label "Time of detection";
-        prop:hasMinTime "0.1".           
-ind:kpi3 a classes:KPI;
-        rdfs:label "Image dimensions";
-        prop:hasMinDimen "600x400". 
+ind:kpi1 a classes:KPI ;
+    rdfs:label "Threshold" ;
+    prop:hasMinValue "0.7"^^xsd:float .
+
+ind:kpi2 a classes:KPI ;
+    rdfs:label "Time of detection" ;
+    prop:hasMinValue "0.5"^^xsd:float .
+
+ind:kpi3 a classes:KPI ;
+    rdfs:label "Image dimensions" ;
+    prop:hasMinValue "416"^^xsd:int .
         
 ind:res1 a classes:Resource;
-        rdfs:label "Pre-trained neural network".        
+        rdfs:label "Pre-trained neural network".     
+   
 ind:res2 a classes:Resource;
-        rdfs:label "CNN logic".         
+        rdfs:label "CNN logic".    
+     
 ind:res3 a classes:Resource;
         rdfs:label "Telegram".
         
 ind:inp1 a classes:Input;
-        rdfs:label "message with image".  
+        rdfs:label "Message with image".
+        
+ind:inp2 a classes:Input;
+        rdfs:label "Prepared dataset".  
+        
+ind:inp3 a classes:Input;
+        rdfs:label "Detected helmets in IMG with bounding boxes". 
+        
+ind:inp4 a classes:Input;
+        rdfs:label "Recognised data".  
+        
+ind:inp5 a classes:Input;
+        rdfs:label "Final results of helmet detection with statistics".        
         
 ind:outp1 a classes:Output;
-        rdfs:label "message of security breach".        
+        rdfs:label "Prepared dataset". 
+        
+ind:outp2 a classes:Output;
+        rdfs:label "Detected helmets in IMG with bounding boxes". 
+        
+ind:outp3 a classes:Output;
+        rdfs:label "Recognised data".  
+        
+ind:outp4 a classes:Output;
+        rdfs:label "Final results of helmet detection with statistics".         
+        
+ind:outp5 a classes:Output;
+        rdfs:label "Message of security breach".        
 
 ind:proc01 prop:SubProcess ind:proc0;
 		rdfs:label "Data preparation";
         prop:hasKPI	ind:kpi1;
-        prop:hasInput  ind:inp1.
+        prop:hasInput  ind:inp1;
+        prop:hasOutput ind:outp1.      
 
-
+ind:outp2 a classes:Output ;
+    rdfs:label "prepared dataset" .      
+        
 ind:proc02 prop:SubProcess ind:proc0;
+		rdfs:label "Helmet Detection Process";
+        prop:hasInput  ind:inp2;
+        prop:hasOutput ind:outp2.
+
+
+ind:proc03 prop:SubProcess ind:proc0;
 		rdfs:label "Helmet Detection";
         prop:hasKPI	ind:kpi2;
         prop:hasKPI	ind:kpi3;
         prop:hasResource ind:res1;
-        prop:hasResource ind:res2.
+        prop:hasResource ind:res2;
+        prop:hasInput  ind:inp3;
+        prop:hasOutput ind:outp3.
 
-ind:proc03 prop:SubProcess ind:proc0;
+        
+ind:detectedHelmet a classes:Result ;
+    rdfs:label "Detected helmet with bounding boxes" ;
+    prop:hasOutput ind:outp3 ;
+    prop:hasBoundingBox shd:boundingBox ;
+    prop:inCameraRange shd:camera .
+
+shd:BoundingBox rdf:type owl:Class ;
+    rdfs:label "Bounding Box" .
+
+shd:boundingBoxOf rdf:type owl:ObjectProperty ;
+    rdfs:label "bounding box of" ;
+    rdfs:domain shd:BoundingBox ;
+    rdfs:range shd:ProtectiveHelmet ;
+    owl:inverseOf shd:hasBoundingBox .
+
+shd:Camera rdf:type owl:Class ;
+    rdfs:label "Camera" .
+
+shd:inCameraRange rdf:type owl:ObjectProperty ;
+    rdfs:label "in camera range" ;
+    rdfs:domain shd:ProtectiveHelmet ;
+    rdfs:range shd:Camera ;
+    owl:inverseOf shd:hasHelmet .
+
+shd:hasID rdf:type owl:DatatypeProperty ;
+    rdfs:label "has ID" ;
+    rdfs:domain shd:Helmet, shd:Human ;
+    rdfs:range xsd:string ;
+    owl:functionalProperty true .
+        
+ind:proc04 prop:SubProcess ind:proc0;
+		rdfs:label "Helmet Detection Results";
+        prop:hasInput  ind:inp4;
+        prop:hasOutput ind:outp4.        
+
+ind:proc05 prop:SubProcess ind:proc0;
 		rdfs:label "Helmet use detection message";
         prop:hasResource ind:res3;
-        prop:hasOutput ind:outp1.
+        prop:hasInput  ind:inp5;
+        prop:hasOutput ind:outp5.
