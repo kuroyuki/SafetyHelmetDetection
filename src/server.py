@@ -70,14 +70,14 @@ def verifyUser(message):
     input_image.save(r'image.png')
 
     #recognise 
-    labels = [] 
-    boxes = []
+    res
     if selectedModel == 'Model 1':
-        [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
+        res = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
     else:
-        [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_dimension, min_threshold)
+        res = recognition.look_for_helmets(model, "image.png", min_dimension, min_threshold)
 
-    print(str(labels)+str(boxes))
+    print(str(res))
+    [labels, boxes] = res
     #prepare answer
     caption = "No violations detected"
     if "head" in labels:
