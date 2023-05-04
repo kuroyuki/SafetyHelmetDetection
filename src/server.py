@@ -9,7 +9,7 @@ import rdflib
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
 yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pt')
-selectedModel = "Model 2"
+selectedModel = "Model 1"
 
 #Load initial KPIs
 g = rdflib.Graph()
@@ -70,12 +70,13 @@ def verifyUser(message):
     input_image.save(r'image.png')
 
     #recognise 
-    [labels, boxes]
+    labels, boxes
     if selectedModel == 'Model 1':
         [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
     else:
         [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_dimension, min_threshold)
 
+    print(str(labels)+str(boxes))
     #prepare answer
     caption = "No violations detected"
     if "head" in labels:
