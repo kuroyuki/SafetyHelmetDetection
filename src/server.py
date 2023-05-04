@@ -8,7 +8,7 @@ import rdflib
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
-yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pth')
+yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pt')
 selectedModel = "Model 2"
 
 #Load initial KPIs
