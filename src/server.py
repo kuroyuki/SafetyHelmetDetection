@@ -88,10 +88,10 @@ def verifyUser(message):
     if caption != "No violations detected":
         draw = ImageDraw.Draw(output_image)
         color = 'red'
-        draw.line((2,2, image_size-2, 2), fill=color, width=2)
-        draw.line((image_size-2,2, image_size-2, image_size-2), fill=color, width=2)
-        draw.line((image_size-2, image_size-2, 2, image_size-2), fill=color, width=2)
-        draw.line((2, image_size-2, 2,2), fill=color, width=2)
+        draw.line((2,2, min_dimension-2, 2), fill=color, width=2)
+        draw.line((min_dimension-2,2, min_dimension-2, min_dimension-2), fill=color, width=2)
+        draw.line((min_dimension-2, min_dimension-2, 2, min_dimension-2), fill=color, width=2)
+        draw.line((2, min_dimension-2, 2,2), fill=color, width=2)
 
 
     bot.send_photo(message.chat.id, output_image, caption=(caption+str(labels)+str(boxes)))
