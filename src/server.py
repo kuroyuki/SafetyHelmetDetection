@@ -13,7 +13,7 @@ selectedModel = "Model 2"
 
 #Load initial KPIs
 g = rdflib.Graph()
-result = g.parse(file=open("https://raw.githubusercontent.com/kuroyuki/SafetyHelmetDetection/main/knowledge/KB_SHD.n3", "r"), format="text/n3")
+result = g.parse("https://raw.githubusercontent.com/kuroyuki/SafetyHelmetDetection/main/knowledge/KB_SHD.n3", format="text/n3")
 
 min_threshold = 0.7 #defaut value
 qres = g.query(
