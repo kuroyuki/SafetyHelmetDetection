@@ -9,6 +9,7 @@ from PIL import Image
 CLASS_NAME = ['__background__', 'helmet', 'head', 'person']
 
 def load_yolo5(path):
+    torch.hub._validate_not_a_forked_repo=lambda a,b,c: True
     torch.hub.load('ultralytics/yolov5', 'custom', path=path, force_reload=True)
 
 def look_for_helmets_with_yolo(model, path):
