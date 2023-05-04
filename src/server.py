@@ -25,7 +25,7 @@ qres = g.query(
        }""")
 
 for row in qres:
-    min_threshold = row.asdict()['min_threshold'].toPython()
+    min_threshold = float(row.asdict()['min_threshold'].toPython())
 
 min_dimension = 416 #defaut value 
 qres = g.query(
@@ -37,7 +37,7 @@ qres = g.query(
        }""")
 
 for row in qres:
-    min_dimension = row.asdict()['min_dimension'].toPython()
+    min_dimension = int(row.asdict()['min_dimension'].toPython())
 
 def preprocess_input_image(img):
     return img.resize((min_dimension, min_dimension))
