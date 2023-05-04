@@ -8,5 +8,4 @@ services:
       - ./telegram-bot.secret
     volumes:
       - ./savemodel:/app/SHD/savemodel
-      - ./knowledge:/app/SHD/knowledge
     restart: unless-stopped

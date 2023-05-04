@@ -13,26 +13,34 @@ selectedModel = "Model 2"
 
 #Load initial KPIs
 g = rdflib.Graph()
-result = g.parse(file=open("knowledge/KB_SHD.n3", "r"), format="text/n3")
+result = g.parse(file=open("https://raw.githubusercontent.com/kuroyuki/SafetyHelmetDetection/main/knowledge/KB_SHD.n3", "r"), format="text/n3")
 
-threshold = g.query(
+min_threshold = 0.7 #defaut value
+qres = g.query(
     """SELECT DISTINCT ?class ?min_threshold
        WHERE {
           ?class a classes:KPI .
           ?class rdfs:label "Threshold" . 
           ?class prop:hasMinValue  ?min_threshold .
-       }""")[0].asdict()['min_threshold'].toPython()
+       }""")
 
-image_size = g.query(
+for row in qres:
+    min_threshold = row.asdict()['min_threshold'].toPython()
+
+min_dimension = 416 #defaut value 
+qres = g.query(
     """SELECT DISTINCT ?class ?min_dimension
        WHERE {
           ?class a classes:KPI .
           ?class rdfs:label "Image dimensions" . 
           ?class prop:hasMinValue  ?min_dimension .
-       }""")[0].asdict()['min_dimension'].toPython()
+       }""")
+
+for row in qres:
+    min_dimension = row.asdict()['min_dimension'].toPython()
 
 def preprocess_input_image(img):
-    return img.resize((image_size, image_size))
+    return img.resize((min_dimension, min_dimension))
 
 def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
@@ -64,9 +72,9 @@ def verifyUser(message):
     #recognise 
     [labels, boxes]
     if selectedModel == 'Model 1':
-        [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", image_size)
+        [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
     else:
-        [labels, boxes] = recognition.look_for_helmets(model, "image.png", image_size, threshold)
+        [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_dimension, min_threshold)
 
     #prepare answer
     caption = "No violations detected"
