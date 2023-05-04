@@ -13,7 +13,7 @@ selectedModel = "Model 2"
 
 #Load initial KPIs
 g = rdflib.Graph()
-result = g.parse(file=open("KB_SHD.n3", "r"), format="text/n3")
+result = g.parse(file=open("knowledge/KB_SHD.n3", "r"), format="text/n3")
 
 threshold = g.query(
     """SELECT DISTINCT ?class ?min_threshold
