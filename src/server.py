@@ -70,7 +70,8 @@ def verifyUser(message):
     input_image.save(r'image.png')
 
     #recognise 
-    labels, boxes
+    labels = [] 
+    boxes = []
     if selectedModel == 'Model 1':
         [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
     else:
