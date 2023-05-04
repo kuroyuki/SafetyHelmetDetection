@@ -4,14 +4,35 @@ from telebot import types
 import requests
 import recognition
 from PIL import Image, ImageDraw
+import rdflib
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
 yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pth')
 selectedModel = "Model 2"
 
+#Load initial KPIs
+g = rdflib.Graph()
+result = g.parse(file=open("KB_SHD.n3", "r"), format="text/n3")
+
+threshold = g.query(
+    """SELECT DISTINCT ?class ?min_threshold
+       WHERE {
+          ?class a classes:KPI .
+          ?class rdfs:label "Threshold" . 
+          ?class prop:hasMinValue  ?min_threshold .
+       }""")[0].asdict()['min_threshold'].toPython()
+
+image_size = g.query(
+    """SELECT DISTINCT ?class ?min_dimension
+       WHERE {
+          ?class a classes:KPI .
+          ?class rdfs:label "Image dimensions" . 
+          ?class prop:hasMinValue  ?min_dimension .
+       }""")[0].asdict()['min_dimension'].toPython()
+
 def preprocess_input_image(img):
-    return img.resize((416, 416))
+    return img.resize((image_size, image_size))
 
 def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
@@ -43,9 +64,9 @@ def verifyUser(message):
     #recognise 
     [labels, boxes]
     if selectedModel == 'Model 1':
-        [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png")
+        [labels, boxes] = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", image_size)
     else:
-        [labels, boxes] = recognition.look_for_helmets(model, "image.png", 0.7)
+        [labels, boxes] = recognition.look_for_helmets(model, "image.png", image_size, threshold)
 
     #prepare answer
     caption = "No violations detected"
@@ -59,10 +80,10 @@ def verifyUser(message):
     if caption != "No violations detected":
         draw = ImageDraw.Draw(output_image)
         color = 'red'
-        draw.line((2,2, 414, 2), fill=color, width=2)
-        draw.line((414,2, 414, 414), fill=color, width=2)
-        draw.line((414, 414, 2, 414), fill=color, width=2)
-        draw.line((2, 414, 2,2), fill=color, width=2)
+        draw.line((2,2, image_size-2, 2), fill=color, width=2)
+        draw.line((image_size-2,2, image_size-2, image_size-2), fill=color, width=2)
+        draw.line((image_size-2, image_size-2, 2, image_size-2), fill=color, width=2)
+        draw.line((2, image_size-2, 2,2), fill=color, width=2)
 
 
     bot.send_photo(message.chat.id, output_image, caption=(caption+str(labels)+str(boxes)))
