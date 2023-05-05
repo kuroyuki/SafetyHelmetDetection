@@ -27,21 +27,22 @@ qres = g.query(
 for row in qres:
     min_threshold = float(row.asdict()['min_threshold'].toPython())
 
-min_dimension = 416 #defaut value 
+dimension = 416 #defaut value 
 qres = g.query(
-    """SELECT DISTINCT ?class ?min_dimension
+    """SELECT DISTINCT ?class ?dimension
        WHERE {
           ?class a classes:KPI .
           ?class rdfs:label "Image dimensions" . 
-          ?class prop:hasMinValue  ?min_dimension .
+          ?class prop:hasMinValue  ?dimension .
        }""")
 
 for row in qres:
-    min_dimension = int(row.asdict()['min_dimension'].toPython())
+    dimension = int(row.asdict()['dimension'].toPython())
 
-print(min_dimension, min_threshold)
+print(dimension, min_threshold)
+
 def preprocess_input_image(img):
-    return img.resize((min_dimension, min_dimension))
+    return img.resize((dimension, dimension))
 
 def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
@@ -71,11 +72,7 @@ def verifyUser(message):
     input_image.save(r'image.png')
 
     #recognise 
-    # res = []
-    # if selectedModel == 'Model 1':
-    #     res = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
-    # else:
-    [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_dimension, min_threshold)
+    [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_threshold)
 
     #prepare answer
     caption = "No violations detected"
@@ -86,13 +83,14 @@ def verifyUser(message):
     #add boxes
     output_image = prepare_output_image(input_image, labels, boxes)
     #add red frame to the image 
+    global dimension
     if caption != "No violations detected":
         draw = ImageDraw.Draw(output_image)
         color = 'red'
-        draw.line((2,2, min_dimension-2, 2), fill=color, width=2)
-        draw.line((min_dimension-2,2, min_dimension-2, min_dimension-2), fill=color, width=2)
-        draw.line((min_dimension-2, min_dimension-2, 2, min_dimension-2), fill=color, width=2)
-        draw.line((2, min_dimension-2, 2,2), fill=color, width=2)
+        draw.line((2,2, dimension-2, 2), fill=color, width=2)
+        draw.line((dimension-2,2, dimension-2, dimension-2), fill=color, width=2)
+        draw.line((dimension-2, dimension-2, 2, dimension-2), fill=color, width=2)
+        draw.line((2, dimension-2, 2,2), fill=color, width=2)
 
 
     bot.send_photo(message.chat.id, output_image, caption=(caption+str(labels)+str(boxes)))
@@ -106,25 +104,21 @@ def start(message):
     btn3 = types.KeyboardButton('Model 3')
 
     markup.add(btn1, btn2, btn3)
-    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n "+selectedModel+" is default choice\n Good luck ", reply_markup=markup)
+    bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n Model 2 is default choice\n Good luck ", reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    global model, selectedModel
+    global model
     if message.text == 'Model 1':
         model = recognition.load_model('./savemodel/best_model.pth')
-        selectedModel = 'Model 1'
         bot.send_message(message.from_user.id, "Using Model 1", parse_mode='Markdown')
     elif message.text == 'Model 2':
         model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
-        selectedModel = 'Model 2'
         bot.send_message(message.from_user.id, "Using Model 2", parse_mode='Markdown')
     elif message.text == 'Model 3':
         model = recognition.load_model('./savemodel/best_model_andrew.pth')
-        selectedModel = 'Model 3'
         bot.send_message(message.from_user.id, "Using Model 3", parse_mode='Markdown')
     else :
         bot.send_message(message.from_user.id,"We've got your message but have no idea at the moment what to do with it. \nSorry", parse_mode='Markdown')
 
 bot.polling(none_stop=True, interval=0) #обязательная для работы бота часть
-
