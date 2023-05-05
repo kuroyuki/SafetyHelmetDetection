@@ -8,7 +8,7 @@ import rdflib
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
-yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pt')
+# yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pt')
 selectedModel = "Model 1"
 
 #Load initial KPIs
@@ -39,6 +39,7 @@ qres = g.query(
 for row in qres:
     min_dimension = int(row.asdict()['min_dimension'].toPython())
 
+print(min_dimension, min_threshold)
 def preprocess_input_image(img):
     return img.resize((min_dimension, min_dimension))
 
@@ -70,14 +71,12 @@ def verifyUser(message):
     input_image.save(r'image.png')
 
     #recognise 
-    res = []
-    if selectedModel == 'Model 1':
-        res = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
-    else:
-        res = recognition.look_for_helmets(model, "image.png", min_dimension, min_threshold)
+    # res = []
+    # if selectedModel == 'Model 1':
+    #     res = recognition.look_for_helmets_with_yolo(yolo_model, "image.png", min_dimension)
+    # else:
+    [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_dimension, min_threshold)
 
-    print(str(res))
-    [labels, boxes] = res
     #prepare answer
     caption = "No violations detected"
     if "head" in labels:
