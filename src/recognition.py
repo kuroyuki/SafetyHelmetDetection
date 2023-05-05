@@ -38,6 +38,7 @@ def load_model(path):
 def look_for_helmets(model, path, size, threshold):
     image = plt.imread(path)
     img = image.copy()
+    print(path, size, threshold)
     img.resize((size, size))
     # bring color channels to front
     img = np.transpose(img, (2, 0, 1)).astype(np.float32)
