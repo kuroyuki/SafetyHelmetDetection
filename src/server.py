@@ -92,7 +92,7 @@ def verifyUser(message):
         draw.line((2, dimension-2, 2,2), fill=color, width=2)
 
 
-    bot.send_photo(message.chat.id, output_image, caption=(caption+str(labels)+str(boxes)))
+    bot.send_photo(message.chat.id, output_image, caption=caption)
 
 @bot.message_handler(commands=['start'])
 def start(message):
