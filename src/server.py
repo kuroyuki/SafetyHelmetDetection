@@ -100,9 +100,9 @@ def verifyUser(message):
 def start(message):
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton('Model 1')
-    btn2 = types.KeyboardButton('Model 2')
-    btn3 = types.KeyboardButton('Model 3')
+    btn1 = types.KeyboardButton('Yolo5')
+    btn2 = types.KeyboardButton('CNN 1')
+    btn3 = types.KeyboardButton('CNN 2')
 
     markup.add(btn1, btn2, btn3)
     bot.send_message(message.from_user.id, "👋 Hi! I'm SafetyHelmetDetector bot!\nYou can choose one of our models to start detection of the helmets on your photos.\n Model 2 is default choice\n Good luck ", reply_markup=markup)

@@ -4,22 +4,22 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor, FasterRC
 import numpy as np
 import torch 
 import  matplotlib.pyplot as plt
+from PIL import Image
 
 CLASS_NAME = ['__background__', 'helmet', 'head', 'person']
 
 
 
-selectedModel = "Model 2"; 
+selectedModel = "Yolo5"; 
 
 
 def load_yolo5(path):
-    torch.hub.load('ultralytics/yolov5', 'custom', skip_validation=True, path=path, force_reload=True)
+    return torch.hub.load('ultralytics/yolov5', 'custom', skip_validation=True, path=path, force_reload=True)
 
 def look_for_helmets_with_yolo(model, path, size):
-    image = plt.imread(path)
-    img = image.copy()
-    results = model(img, size=size)  
-    print(results)
+    im1 = Image.open(path)
+    results = model([im1], size=size)  
+    print(results.xyxy[0])
     return results
 
 def load_cnn_model(path):
@@ -43,11 +43,11 @@ model = ''
 def load_model(m):
     global model, selectedModel
     selectedModel = m
-    if selectedModel ==  "Model 1":
+    if selectedModel ==  "Yolo5":
         model = load_yolo5('./savemodel/best_model_yolo.pt')
-    elif selectedModel ==  "Model 2":
+    elif selectedModel ==  "CNN 2":
         model = load_cnn_model('./savemodel/best_model_vitaliy.pth')
-    elif selectedModel ==  "Model 3":
+    elif selectedModel ==  "CNN 3":
         model = load_cnn_model('./savemodel/best_model_andrew.pth')
 
 load_model(selectedModel)
@@ -87,10 +87,10 @@ def look_for_helmets(model, path, threshold):
 def find_helmets(image, threshold, size):
     global selectedModel
     print(selectedModel)
-    if selectedModel == 'Model 1':
+    if selectedModel == 'Yolo5':
         return look_for_helmets_with_yolo(model, image, size)
-    elif selectedModel == 'Model 2':
+    elif selectedModel == 'CNN 1':
         return look_for_helmets(model, image, threshold)
-    elif selectedModel == 'Model 2':
+    elif selectedModel == 'CNN 2':
         return look_for_helmets(model, image, threshold)
     
