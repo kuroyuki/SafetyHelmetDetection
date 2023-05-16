@@ -5,6 +5,7 @@ import requests
 import recognition
 from PIL import Image, ImageDraw
 import rdflib
+import time
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
 model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
@@ -70,6 +71,8 @@ def verifyUser(message):
     input_image = preprocess_input_image(input_image)
     input_image.save(r'image.png')
 
+    start_time = time.time()
+
     #recognise 
     [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_threshold)
 
@@ -91,6 +94,7 @@ def verifyUser(message):
         draw.line((dimension-2, dimension-2, 2, dimension-2), fill=color, width=2)
         draw.line((2, dimension-2, 2,2), fill=color, width=2)
 
+    print("--- %s seconds ---" % (time.time() - start_time))
 
     bot.send_photo(message.chat.id, output_image, caption=caption)
 
