@@ -96,7 +96,7 @@ def verifyUser(message):
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
-    bot.send_photo(message.chat.id, output_image, caption=caption)
+    bot.send_photo(message.chat.id, output_image, caption=caption + " Took "+(time.time() - start_time)+" s")
 
 @bot.message_handler(commands=['start'])
 def start(message):
