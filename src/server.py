@@ -8,9 +8,6 @@ import rdflib
 import time
 
 bot = telebot.TeleBot(os.environ['TOKEN']) 
-model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
-# yolo_model = recognition.load_yolo5('./savemodel/best_model_yolo.pt')
-selectedModel = "Model 2"
 
 #Load initial KPIs
 g = rdflib.Graph()
@@ -73,8 +70,10 @@ def verifyUser(message):
 
     start_time = time.time()
 
+    global dimension
+
     #recognise 
-    [labels, boxes] = recognition.look_for_helmets(model, "image.png", min_threshold)
+    [labels, boxes] = recognition.find_helmets("image.png", min_threshold, dimension)
 
     #prepare answer
     caption = "No violations detected"
@@ -85,7 +84,6 @@ def verifyUser(message):
     #add boxes
     output_image = prepare_output_image(input_image, labels, boxes)
     #add red frame to the image 
-    global dimension
     if caption != "No violations detected":
         draw = ImageDraw.Draw(output_image)
         color = 'red'
@@ -96,7 +94,7 @@ def verifyUser(message):
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
-    bot.send_photo(message.chat.id, output_image, caption=caption + " Took "+(time.time() - start_time)+" s")
+    bot.send_photo(message.chat.id, output_image, caption=caption + " Took "+str((time.time() - start_time))+" s")
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -111,17 +109,8 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    global model
-    if message.text == 'Model 1':
-        model = recognition.load_model('./savemodel/best_model.pth')
-        bot.send_message(message.from_user.id, "Using Model 1", parse_mode='Markdown')
-    elif message.text == 'Model 2':
-        model = recognition.load_model('./savemodel/best_model_vitaliy.pth')
-        bot.send_message(message.from_user.id, "Using Model 2", parse_mode='Markdown')
-    elif message.text == 'Model 3':
-        model = recognition.load_model('./savemodel/best_model_andrew.pth')
-        bot.send_message(message.from_user.id, "Using Model 3", parse_mode='Markdown')
-    else :
-        bot.send_message(message.from_user.id,"We've got your message but have no idea at the moment what to do with it. \nSorry", parse_mode='Markdown')
+    recognition.load_model(message.text)
+    bot.send_message(message.from_user.id, "Using "+str(message.text), parse_mode='Markdown')
+  
 
 bot.polling(none_stop=True, interval=0) #обязательная для работы бота часть

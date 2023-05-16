@@ -7,8 +7,22 @@ import  matplotlib.pyplot as plt
 
 CLASS_NAME = ['__background__', 'helmet', 'head', 'person']
 
-def load_model(path):
-    
+
+
+selectedModel = "Model 2"; 
+
+
+def load_yolo5(path):
+    torch.hub.load('ultralytics/yolov5', 'custom', skip_validation=True, path=path, force_reload=True)
+
+def look_for_helmets_with_yolo(model, path, size):
+    image = plt.imread(path)
+    img = image.copy()
+    results = model(img, size=size)  
+    print(results)
+    return results
+
+def load_cnn_model(path):
     # load Faster RCNN pre-trained model
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn(weights=FasterRCNN_ResNet50_FPN_Weights.DEFAULT)
     
@@ -25,8 +39,21 @@ def load_model(path):
     print("Using model from: "+path)
     return model
 
+model = ''
+def load_model(m):
+    global model, selectedModel
+    selectedModel = m
+    if selectedModel ==  "Model 1":
+        model = load_yolo5('./savemodel/best_model_yolo.pt')
+    elif selectedModel ==  "Model 2":
+        model = load_cnn_model('./savemodel/best_model_vitaliy.pth')
+    elif selectedModel ==  "Model 3":
+        model = load_cnn_model('./savemodel/best_model_andrew.pth')
+
+load_model(selectedModel)
+
 def look_for_helmets(model, path, threshold):
-    image = plt.imread('./image.png')
+    image = plt.imread(path)
     img = image.copy()
     # bring color channels to front
     img = np.transpose(img, (2, 0, 1)).astype(np.float32)
@@ -56,3 +83,14 @@ def look_for_helmets(model, path, threshold):
         return pred_class, boxes
     else:
         return []
+
+def find_helmets(image, threshold, size):
+    global selectedModel
+    print(selectedModel)
+    if selectedModel == 'Model 1':
+        return look_for_helmets_with_yolo(model, image, size)
+    elif selectedModel == 'Model 2':
+        return look_for_helmets(model, image, threshold)
+    elif selectedModel == 'Model 2':
+        return look_for_helmets(model, image, threshold)
+    
