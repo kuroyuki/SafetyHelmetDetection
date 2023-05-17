@@ -16,11 +16,22 @@ selectedModel = "Yolo5";
 def load_yolo5(path):
     return torch.hub.load('ultralytics/yolov5', 'custom', skip_validation=True, path=path, force_reload=True)
 
-def look_for_helmets_with_yolo(model, path, size):
+def look_for_helmets_with_yolo(model, path, size, threshold):
     im1 = Image.open(path)
     results = model([im1], size=size)  
-    print(results.xyxy[0])
-    return results
+    output = results.pandas().xyxy[0] 
+    
+    output['xmin'] = output['xmin'].astype(float)
+    output['ymin'] = output['ymin'].astype(float)
+    output['xmax'] = output['xmax'].astype(float)
+    output['ymax'] = output['ymax'].astype(float)
+    output['confidence'] = output['confidence'].astype(float)
+
+    output["boxes"] = output[['xmin', 'ymin', 'xmax', 'ymax']].values.tolist()
+
+    labels = output['name']
+
+    return labels, output["boxes"] 
 
 def load_cnn_model(path):
     # load Faster RCNN pre-trained model
@@ -45,9 +56,9 @@ def load_model(m):
     selectedModel = m
     if selectedModel ==  "Yolo5":
         model = load_yolo5('./savemodel/best_model_yolo.pt')
-    elif selectedModel ==  "CNN 2":
+    elif selectedModel ==  "CNN 1":
         model = load_cnn_model('./savemodel/best_model_vitaliy.pth')
-    elif selectedModel ==  "CNN 3":
+    elif selectedModel ==  "CNN 2":
         model = load_cnn_model('./savemodel/best_model_andrew.pth')
 
 load_model(selectedModel)
@@ -88,7 +99,7 @@ def find_helmets(image, threshold, size):
     global selectedModel
     print(selectedModel)
     if selectedModel == 'Yolo5':
-        return look_for_helmets_with_yolo(model, image, size)
+        return look_for_helmets_with_yolo(model, image, size, threshold)
     elif selectedModel == 'CNN 1':
         return look_for_helmets(model, image, threshold)
     elif selectedModel == 'CNN 2':
