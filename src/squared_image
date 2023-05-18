@@ -1,0 +1,32 @@
+from PIL import Image, ImageDraw
+
+def make_square_image(image_path):
+    # Open the image using Pillow
+    image = Image.open('tower.jpg')
+
+    # Calculate the dimensions of the square image
+    width, height = image.size
+    size = max(width, height)
+
+    # Create a new blank square image with a white background
+    square_image = Image.new('RGB', (size, size), (255, 255, 255))
+
+    # Calculate the offset to center the original image
+    x_offset = (size - width) // 2
+    y_offset = (size - height) // 2
+
+    # Paste the original image onto the square image
+    square_image.paste(image, (x_offset, y_offset))
+
+    # Create a rectangle around the edges of the image
+    draw = ImageDraw.Draw(square_image)
+    draw.rectangle([(0, 0), (size - 1, size - 1)], outline=(0, 0, 0), width=5)
+
+    # Save the resulting square image
+    square_image.save('square_image.png')
+
+# Specify the path to the input image
+image_path = 'input_image.jpg'
+
+# Call the function to create the square image
+make_square_image(image_path)
