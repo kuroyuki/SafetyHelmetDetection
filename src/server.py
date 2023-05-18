@@ -40,6 +40,7 @@ for row in qres:
 print(dimension, min_threshold)
 
 def preprocess_input_image(img):
+    width, height = img.size
     # Create a new blank square image with a white background
     square_image = Image.new('RGB', (dimension, dimension), (255, 255, 255))
 
