@@ -41,7 +41,7 @@ print(dimension, min_threshold)
 
 def preprocess_input_image(img):
     # Create a new blank square image with a white background
-    square_image = Image.new('RGB', (size, size), (255, 255, 255))
+    square_image = Image.new('RGB', (dimension, dimension), (255, 255, 255))
 
     # Calculate the offset to center the original image
     x_offset = (dimension - width) // 2
