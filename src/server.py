@@ -49,7 +49,7 @@ def preprocess_input_image(img):
     y_offset = (dimension - height) // 2
 
     # Paste the original image onto the square image
-    square_image.paste(image, (x_offset, y_offset))
+    square_image.paste(img, (x_offset, y_offset))
     
     return square_image
 
