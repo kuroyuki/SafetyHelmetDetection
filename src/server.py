@@ -89,12 +89,12 @@ def verifyUser(message):
     #recognise 
     [labels, boxes] = recognition.find_helmets("image.png", min_threshold, dimension)
 
+    print(labels)
     #prepare answer
     caption = "No violations detected"
     if "head" in labels:
         caption="Warning !!!!"
-    if len(labels) == 0:
-        caption="Warning !!!!"
+ 
     #add boxes
     output_image = prepare_output_image(input_image, labels, boxes)
     #add red frame to the image 

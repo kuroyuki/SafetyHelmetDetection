@@ -21,15 +21,18 @@ def look_for_helmets_with_yolo(model, path, size, threshold):
     results = model([im1], size=size)  
     output = results.pandas().xyxy[0] 
     
+    print(output)
+    
     output['xmin'] = output['xmin'].astype(float)
     output['ymin'] = output['ymin'].astype(float)
     output['xmax'] = output['xmax'].astype(float)
     output['ymax'] = output['ymax'].astype(float)
     output['confidence'] = output['confidence'].astype(float)
 
+    output = output[output['confidence'].astype(float) > threshold]
     output["boxes"] = output[['xmin', 'ymin', 'xmax', 'ymax']].values.tolist()
 
-    labels = output['name']
+    labels = output['name'].values.tolist()
 
     return labels, output["boxes"] 
 
@@ -86,11 +89,13 @@ def look_for_helmets(model, path, threshold):
         scores = outputs[0]['scores'].data.numpy()
         lbls = outputs[0]['labels'].data.numpy()
 
+        print(outputs[0]['scores'])
         # filter out boxes according to `detection_threshold`
         boxes = boxes[scores > threshold].astype(np.int32)
         lbls = lbls[scores > threshold].astype(np.int32)
         # get all the predicited class names
         pred_class = [CLASS_NAME[i] for i in lbls]
+
         return pred_class, boxes
     else:
         return []
