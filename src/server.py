@@ -40,18 +40,21 @@ for row in qres:
 print(dimension, min_threshold)
 
 def preprocess_input_image(img):
+    # Calculate the dimensions of the square image
     width, height = img.size
+    size = max(width, height)
+
     # Create a new blank square image with a white background
-    square_image = Image.new('RGB', (dimension, dimension), (255, 255, 255))
+    square_image = Image.new('RGB', (size, size), (255, 255, 255))
 
     # Calculate the offset to center the original image
-    x_offset = (dimension - width) // 2
-    y_offset = (dimension - height) // 2
+    x_offset = (size - width) // 2
+    y_offset = (size - height) // 2
 
     # Paste the original image onto the square image
-    square_image.paste(img, (x_offset, y_offset))
+    square_image.paste(image, (x_offset, y_offset))
     
-    return square_image
+    return square_image.resize(dimension, dimension)
 
 def prepare_output_image(img, labels, boxes):
     draw = ImageDraw.Draw(img)
