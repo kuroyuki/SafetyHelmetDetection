@@ -29,7 +29,7 @@ def look_for_helmets_with_yolo(model, path, size, threshold):
     output['ymax'] = output['ymax'].astype(float)
     output['confidence'] = output['confidence'].astype(float)
 
-    output = output[output['confidence'].astype(float) > threshold]
+    output = output[output['confidence'].astype(float) > threshold/2]
     output["boxes"] = output[['xmin', 'ymin', 'xmax', 'ymax']].values.tolist()
 
     labels = output['name'].values.tolist()
